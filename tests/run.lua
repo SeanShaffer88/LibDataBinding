@@ -60,7 +60,7 @@ local LDB = assert(_G.LibStub("LibDataBinding-1.0"), "library did not register w
 
 --== Basics =================================================================
 section("library registration")
-eq("version string", LDB.VERSION, "1.0.0")
+eq("version string", LDB.VERSION, "1.0.2")
 eq("major string", LDB.MAJOR, "LibDataBinding-1.0")
 check("has NewBinding", type(LDB.NewBinding) == "function")
 check("has RegisterDataSource", type(LDB.RegisterDataSource) == "function")

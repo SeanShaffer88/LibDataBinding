@@ -84,6 +84,13 @@ jobs:
             echo "::error::archive is missing $ADDON_DIR/$ADDON_DIR.toc at the root"
             exit 1
           }
+          # ## IconTexture must point at a texture that is actually in the zip.
+          icon=$(grep '^## IconTexture:' "$ADDON_DIR/$ADDON_DIR.toc" | sed 's|^## IconTexture:[[:space:]]*||' | sed 's|\\|/|g; s|^Interface/AddOns/||')
+          unzip -l "$file" | grep -q " $icon\.png$" || unzip -l "$file" | grep -q " ${icon}$" || {
+            echo "::error::TOC IconTexture '$icon' does not resolve inside the archive"
+            exit 1
+          }
+          echo "icon: $icon.png" >> "$GITHUB_STEP_SUMMARY"
           echo "SHA256: $(sha256sum "$file")" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the asset

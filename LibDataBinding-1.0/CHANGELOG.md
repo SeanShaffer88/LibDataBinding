@@ -4,6 +4,31 @@ All notable changes to LibDataBinding-1.0 are documented here.
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and the project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.2] — 2026-11-11
+
+### Added
+
+* Addon icon: `## IconTexture` in the TOC plus `media/icon.png` (64×64) and
+  `media/icon@2x.png` (128×128), so LibDataBinding-1.0 shows its own emblem in
+  the client's AddOns list instead of a question mark. Consumers that embed the
+  folder get the icon too.
+* Repository artwork in `.github/assets/`: `icon.png` (1024×1024 rounded
+  avatar), `social-preview.png` (1280×640) and `banner.png` (1280×300, used at
+  the top of the README).
+
+### Changed
+
+* TOC notes rewritten to be shorter and to state "embeds via LibStub" up front;
+  added `X-Website` and `X-Icon-512` (used by addon listing sites).
+* `lib.VERSION` and `## Version` are now `1.0.2` (was `1.0.0`). No API change;
+  the LibStub minor revision is unchanged, so embedded copies are still
+  interchangeable and `NewLibrary` continues to recognise an existing copy.
+
+### Notes
+
+* No engine code changed. `media/` is intentionally not on the `.pkgmeta`
+  ignore list so the texture ships with packaged releases.
+
 ## [1.0.0] — 2026-11-11
 
 First public release. Target client: World of Warcraft Classic Forever,
@@ -62,4 +87,5 @@ First public release. Target client: World of Warcraft Classic Forever,
 * Zero use of deprecated API (`this`, `getglobal`, `arg1..argN`); modern `_G`
   lookups and `C_` namespaces only.
 
+[1.0.2]: https://github.com/SeanShaffer88/LibDataBinding/releases/tag/1.0.2
 [1.0.0]: https://github.com/SeanShaffer88/LibDataBinding/releases/tag/1.0.0

@@ -1,3 +1,5 @@
+<img src="../.github/assets/banner.png" alt="LibDataBinding-1.0 — reactive data binding for WoW Classic Forever" width="100%">
+
 # LibDataBinding-1.0
 
 Reactive data binding for **World of Warcraft Classic Forever** (Interface `11507`).
@@ -140,7 +142,7 @@ All functions are methods on the library object returned by
 
 ### lib.VERSION
 
-`"1.0.0"` — also available as `lib.MAJOR` (`"LibDataBinding-1.0"`) and
+`"1.0.2"` — also available as `lib.MAJOR` (`"LibDataBinding-1.0"`) and
 `lib.MINOR` (`1`, the LibStub minor revision).
 
 ### `binding = lib:NewBinding(target, property, source, [options])`
@@ -718,7 +720,7 @@ does not claim any frame names, so it coexists with `AceGUI`, `LibSharedMedia`,
 
 ## 11. Versioning
 
-Semantic versioning, starting at **1.0.0** (this release):
+Semantic versioning, starting at **1.0.0**; the current release is **1.0.2**:
 
 | Bump | When |
 | --- | --- |
@@ -740,17 +742,20 @@ subscriptions for non-widget consumers, and an `AceConfig`-style schema helper.
 ## 12. File layout and embedded copies
 
 ```
-LibDataBinding-1.0/
-├── LibDataBinding-1.0.toc   -- Interface 11507, metadata
-├── LibDataBinding-1.0.lua   -- engine (~500 lines) + built-in sources,
-│                              demo frame, self test and slash command
-├── README.md                -- this file
+LibDataBinding-1.0/               <- drop this folder into Interface/AddOns
+├── LibDataBinding-1.0.toc        -- Interface 11507, metadata, ## IconTexture
+├── LibDataBinding-1.0.lua        -- engine + built-in sources, demo frame,
+│                                   self test and slash command
+├── README.md                     -- this file
 ├── CHANGELOG.md
-├── LICENSE                  -- MIT
-└── tests/                   -- not shipped; mock client + suite
-    ├── wow_mock.lua
-    ├── LibStub.lua
-    └── run.lua
+├── LICENSE
+└── media/                        -- addon-list icon (## IconTexture)
+    ├── icon.png                  -- 64x64 (in-game)
+    └── icon@2x.png               -- 128x128 (high-DPI)
+
+Repository only, never loaded in game:
+.github/assets/                   -- icon, social preview, README banner
+tests/                            -- mock client + 123-check suite
 ```
 
 * **Engine size** (non-blank, non-comment lines, measured):
@@ -764,7 +769,13 @@ LibDataBinding-1.0/
 * **Embedding:** copy the folder, list `LibDataBinding-1.0.lua` after LibStub
   in your TOC. Duplicate copies no-op through `LibStub:NewLibrary`.
 * **Standalone:** the same folder is a valid addon on its own (it needs LibStub
-  present).
+  present). It shows its own icon in the client's AddOns list via
+  `## IconTexture`.
+* **Icon:** `media/icon.png` is 64×64 RGBA with transparent rounded corners;
+  `media/icon@2x.png` is the 128×128 variant for high-DPI displays. Both are
+  generated from `.github/assets/icon.png`, which is the canonical artwork.
+  `media/` is deliberately **not** in the `.pkgmeta` ignore list so packaged
+  releases ship the texture.
 
 ## Releases
 
@@ -773,13 +784,18 @@ Releases are published at
 
 | Release | Tag | Notes |
 | --- | --- | --- |
-| 1.0.0 | `1.0.0` | First public release. Source tag only; see "Installing from a tag" below. |
+| 1.0.2 | `1.0.2` | Addon icon (`## IconTexture` + `media/`), repository artwork, metadata polish. No engine change. |
+| 1.0.0 | `1.0.0` | First public release. |
+
+Every release from `1.0.1` onward carries a packaged
+`LibDataBinding-1.0-<version>.zip` asset (addon folder at the archive root, so it
+unpacks straight into `Interface/AddOns/`).
 
 The packaging workflow (`.github/workflows/release.yml`) runs the headless suite
 and attaches `LibDataBinding-1.0-<version>.zip` to every release created from
 tag `1.0.1` onward; the asset unpacks straight into `Interface/AddOns/`.
 
-### Installing from a tag (1.0.0)
+### Installing the 1.0.0 tag (source only)
 
 GitHub's auto-generated source archive nests the folder one level deep, so
 extract and move it rather than dropping the zip in:
