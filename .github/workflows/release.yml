@@ -1,0 +1,94 @@
+name: release
+
+# Packages LibDataBinding-1.0 and attaches the ready-to-install zip to the
+# GitHub release. Runs when a version tag is pushed (e.g. `1.0.0`) or manually
+# for an existing tag via "Run workflow".
+on:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to package and attach to its release (e.g. 1.0.0)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+env:
+  ADDON_DIR: LibDataBinding-1.0
+
+jobs:
+  test:
+    name: Headless tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Lua interpreters
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq lua5.1 lua5.4 luajit
+
+      - name: Run the suite (Lua 5.1)
+        run: lua5.1 tests/run.lua
+
+      - name: Run the suite (Lua 5.4)
+        run: lua5.4 tests/run.lua
+
+      - name: Run the suite (LuaJIT)
+        run: luajit tests/run.lua
+
+  package:
+    name: Package and upload
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag || github.ref }}
+
+      - name: Resolve version
+        id: v
+        run: |
+          ref='${{ inputs.tag || github.ref_name }}'
+          echo "version=$ref" >> "$GITHUB_OUTPUT"
+          # The version declared in the TOC must match the tag being released.
+          toc=$(grep '^## Version:' "$ADDON_DIR/$ADDON_DIR.toc" | sed 's/^## Version:[[:space:]]*//')
+          echo "toc=$toc" >> "$GITHUB_OUTPUT"
+          if [ "$toc" != "$ref" ]; then
+            echo "::error file=$ADDON_DIR/$ADDON_DIR.toc::TOC Version '$toc' does not match tag '$ref'"
+            exit 1
+          fi
+
+      - name: Build the addon zip
+        run: |
+          version='${{ steps.v.outputs.version }}'
+          rm -rf build && mkdir build
+          cp -r "$ADDON_DIR" build/
+          cd build
+          # Ship only what the client needs: no .pkgmeta, no tests, no CI files.
+          rm -f "$ADDON_DIR/.pkgmeta"
+          zip -qr "../$ADDON_DIR-$version.zip" "$ADDON_DIR"
+
+      - name: Verify the archive layout
+        run: |
+          version='${{ steps.v.outputs.version }}'
+          file="$ADDON_DIR-$version.zip"
+          unzip -l "$file"
+          # The zip must contain <ADDON_DIR>/<ADDON_DIR>.toc at its root so it
+          # unpacks straight into Interface/AddOns.
+          unzip -l "$file" | grep -q " $ADDON_DIR/$ADDON_DIR.toc$" || {
+            echo "::error::archive is missing $ADDON_DIR/$ADDON_DIR.toc at the root"
+            exit 1
+          }
+          echo "SHA256: $(sha256sum "$file")" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload the asset
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          version='${{ steps.v.outputs.version }}'
+          gh release upload "$version" "$ADDON_DIR-$version.zip" --clobber

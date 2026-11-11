@@ -1,0 +1,13 @@
+# CurseForge/WoWAce packager configuration (only used when packaging a release).
+package-as: LibDataBinding-1.0
+
+ignore:
+  - tests
+  - .pkgmeta
+  - .gitignore
+  - README.md
+  - CHANGELOG.md
+  - LICENSE
+
+# LibStub is required at runtime but is deliberately NOT vendored: consumers
+# embed it in their own addon, or install it standalone.
