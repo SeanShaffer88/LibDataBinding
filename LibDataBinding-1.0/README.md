@@ -766,6 +766,13 @@ LibDataBinding-1.0/
 * **Standalone:** the same folder is a valid addon on its own (it needs LibStub
   present).
 
+## Releases
+
+Tagged releases are published at
+<https://github.com/SeanShaffer88/LibDataBinding/releases> as
+`LibDataBinding-1.0-<version>.zip`. The current release is **1.0.0**
+(tag `1.0.0`), whose asset unpacks straight into `Interface/AddOns/`.
+
 ## License
 
 MIT — see `LICENSE`. Attribute Sean Shaffer.

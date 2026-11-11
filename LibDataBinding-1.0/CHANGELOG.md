@@ -62,4 +62,4 @@ First public release. Target client: World of Warcraft Classic Forever,
 * Zero use of deprecated API (`this`, `getglobal`, `arg1..argN`); modern `_G`
   lookups and `C_` namespaces only.
 
-[1.0.0]: https://github.com/SeanShaffer88/LibDataBinding/releases/tag/v1.0.0
+[1.0.0]: https://github.com/SeanShaffer88/LibDataBinding/releases/tag/1.0.0
