@@ -91,6 +91,18 @@ MyAddon.lua
 each embed LibDataBinding without conflict — the first copy loaded wins and all
 others become a no-op.
 
+Two practical rules for libraries:
+
+* **List `Libs\LibStub\LibStub.lua` before** `LibDataBinding-1.0.lua`. Each
+  embedded copy that is not first is skipped before it touches LibStub, so a
+  second copy never needs it.
+* **Do not add `## Dependencies: LibDataBinding-1.0`** to a TOC that already
+  embeds the file — that would make the client look for a *standalone*
+  installation as well, and `OptionalDeps: LibDataBinding-1.0` is enough for
+  load ordering when you do want to honour an existing install.
+* The standalone addon is safe to leave enabled alongside embedders: the extra
+  copy is a no-op and the slash command simply gets registered once.
+
 ---
 
 ## 2. Quick start
@@ -264,6 +276,9 @@ registered for it. Useful in tests.
 ### `lib:RunSelfTest([showUI])` → `passed, failed`
 
 The engine behind `/libdatabinding test` (see [section 7](#7-testing-guide)).
+With `showUI` it also creates the demo panel and stores it in `lib.testFrame`;
+call `lib:UnbindAll(lib.testFrame)` when you are done with it (clicking the
+panel does that for you).
 
 ---
 
@@ -282,6 +297,9 @@ The engine behind `/libdatabinding test` (see [section 7](#7-testing-guide)).
 | `UnitName` | `UnitName(unit)` | `UNIT_NAME_UPDATE` |
 | `GetMoney` | `GetMoney()` | `PLAYER_MONEY`, `PLAYER_ENTERING_WORLD` |
 | `GetSpellCooldown` | remaining seconds | `SPELL_UPDATE_COOLDOWN`, `SPELLS_CHANGED` |
+
+`GetSpellCooldown` also listens to `PLAYER_ENTERING_WORLD`. `GetMoney` returns
+raw copper — pair it with `lib.Formatters.money`.
 
 Every unit source accepts `options.unit` (default `"player"`) and also listens
 to the events that change *which unit a token points at*:
@@ -539,7 +557,9 @@ The repository ships a mock-client test suite that loads the real
 lua tests/run.lua      # 123 checks (121 on Lua 5.2+), exits non-zero on failure
 ```
 
-It needs nothing but a Lua 5.1-compatible interpreter (LuaJIT, Lua 5.1–5.4).
+It needs nothing but a Lua 5.1-compatible interpreter. The suite is verified on
+Lua 5.1, 5.2, 5.3, 5.4 and LuaJIT 2.1 (123 checks; 121 on 5.2+, where the
+`setfenv`-based global audit is skipped because `setfenv` no longer exists).
 `tests/wow_mock.lua` fakes frames, widgets, events and the clock;
 `tests/LibStub.lua` is a minimal stand-in for LibStub; `tests/run.lua` is the
 suite, including a strict "no globals leaked" audit.
@@ -625,6 +645,12 @@ Practical rules for consumers:
 ### Client
 
 * Written for **Classic Forever / Interface 11507** (`C_` namespaces only).
+  Built-in sources deliberately use the stable, unhinted *global* unit API
+  (`UnitHealth`, `UnitPower`, `UnitName`) rather than newer mirrors: that is the
+  most portable surface across Classic builds, and it is what the client's own
+  unit frames are driven by. The library calls no `C_` namespace itself, so
+  future `C_` migrations cannot break it; consumers may call any `C_` API from
+  their own getters and those values flow through unchanged.
 * No deprecated API: no `this`, no `getglobal`, no `arg1..argN`, no
   `GetSpellInfo` string lookups, no `UIFrameFadeIn`-style legacy helpers.
 * Every event is registered through a `pcall`, so an event that a particular
