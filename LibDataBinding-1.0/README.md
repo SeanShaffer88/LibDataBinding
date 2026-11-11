@@ -768,10 +768,27 @@ LibDataBinding-1.0/
 
 ## Releases
 
-Tagged releases are published at
-<https://github.com/SeanShaffer88/LibDataBinding/releases> as
-`LibDataBinding-1.0-<version>.zip`. The current release is **1.0.0**
-(tag `1.0.0`), whose asset unpacks straight into `Interface/AddOns/`.
+Releases are published at
+<https://github.com/SeanShaffer88/LibDataBinding/releases>:
+
+| Release | Tag | Notes |
+| --- | --- | --- |
+| 1.0.0 | `1.0.0` | First public release. Source tag only; see "Installing from a tag" below. |
+
+The packaging workflow (`.github/workflows/release.yml`) runs the headless suite
+and attaches `LibDataBinding-1.0-<version>.zip` to every release created from
+tag `1.0.1` onward; the asset unpacks straight into `Interface/AddOns/`.
+
+### Installing from a tag (1.0.0)
+
+GitHub's auto-generated source archive nests the folder one level deep, so
+extract and move it rather than dropping the zip in:
+
+1. Download `Source code (zip)` for tag `1.0.0`.
+2. Extract it; you get `LibDataBinding-1.0-1.0.0/LibDataBinding-1.0/`.
+3. Move **that inner `LibDataBinding-1.0` folder** into `Interface/AddOns/`,
+   so the path is `Interface/AddOns/LibDataBinding-1.0/LibDataBinding-1.0.toc`.
+4. Discard `tests/` — it is development-only and is not loaded by the TOC.
 
 ## License
 
