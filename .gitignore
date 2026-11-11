@@ -1,0 +1,10 @@
+# OS / editor noise
+.DS_Store
+*.swp
+*~
+.idea/
+.vscode/
+
+# Local packaging output
+*.zip
+.release/

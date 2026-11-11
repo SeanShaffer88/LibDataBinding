@@ -1,0 +1,17 @@
+## Interface: 11507
+## Title: |cff33ff99LibDataBinding-1.0|r
+## Notes: Reactive data binding for addon authors: tie FontStrings, StatusBars and Textures to unit stats, custom variables and events, and let the library update them automatically. Embed via LibStub("LibDataBinding-1.0").
+## Notes-deDE: Reaktives Data-Binding fuer Addon-Autoren. Einbettbare Bibliothek, keine Pflicht-Abhaengigkeiten.
+## Notes-frFR: Data-binding reactif pour auteurs d'addons. Bibliotheque embarquee, aucune dependance obligatoire.
+## Author: Sean Shaffer
+## Version: 1.0.0
+## X-Category: Library
+## X-License: MIT
+## X-Embeds: LibStub
+## X-Dependencies: none
+## X-Website: https://github.com/SeanShaffer88/LibDataBinding
+## X-Release: 1.0.0
+## DefaultState: enabled
+## LoadOnDemand: 0
+
+LibDataBinding-1.0.lua
