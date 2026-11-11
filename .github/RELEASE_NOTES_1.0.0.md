@@ -19,12 +19,23 @@ LDB:NewBinding(MyAddon.nameText,  "SetText",         "UnitName", { unit = "targe
 
 ## Installation
 
-1. Download `LibDataBinding-1.0-1.0.0.zip` below and extract it so you end up
-   with `Interface/AddOns/LibDataBinding-1.0/LibDataBinding-1.0.toc`.
-2. `LibStub` is required — install it standalone or embed it in your own addon
+This release is source-only (no packaged zip attached). Install from the tag:
+
+1. Download **Source code (zip)** below and extract it. You get
+   `LibDataBinding-1.0.0/LibDataBinding-1.0/`.
+2. Move the **inner `LibDataBinding-1.0` folder** into
+   `Interface/AddOns/`, so the final path is
+   `Interface/AddOns/LibDataBinding-1.0/LibDataBinding-1.0.toc`.
+3. `LibStub` is required — install it standalone or embed it in your own addon
    **before** `LibDataBinding-1.0.lua`.
-3. `/reload`, then run `/libdatabinding test` to run the self test and open a
+4. `/reload`, then run `/libdatabinding test` to run the self test and open a
    demo health panel.
+
+The `tests/` folder in the archive is development-only; the TOC does not load
+it, so you can delete it. From tag `1.0.1` onward,
+`.github/workflows/release.yml` attaches a ready-to-install
+`LibDataBinding-1.0-<version>.zip` (addon folder at the archive root) to every
+release.
 
 Addon authors embedding the library should copy the folder into `Libs/` and
 list `Libs\LibDataBinding-1.0\LibDataBinding-1.0.lua` after LibStub in their
@@ -74,6 +85,9 @@ embed it at once.
 - Headless suite: **123 checks passing** on Lua 5.1, 5.2, 5.3, 5.4 and
   LuaJIT 2.1 (121 on 5.2+, where the `setfenv`-based global-leak audit is
   skipped). Run it with `lua tests/run.lua` from the repository root.
+- Packaged build: the addon folder was extracted from tag `1.0.0`, loaded
+  through its TOC file list alone, and passed a player-health binding, an
+  event-driven target-name binding and the 20-check in-game self test.
 - In-game self test: **20/20** checks pass from the packaged build, and the
   package was loaded through its TOC file list in a simulated clean install.
 - Size: **517 non-comment lines of engine** (including the built-in data
