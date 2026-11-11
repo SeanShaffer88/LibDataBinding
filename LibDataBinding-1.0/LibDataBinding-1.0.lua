@@ -35,7 +35,7 @@ local CreateFrame, GetTime = CreateFrame, GetTime
 local ChatFrame = _G.DEFAULT_CHAT_FRAME or _G.ChatFrame1
 local EMPTY = {}
 
-lib.VERSION, lib.MAJOR, lib.MINOR = "1.0.0", MAJOR, MINOR
+lib.VERSION, lib.MAJOR, lib.MINOR = "1.0.2", MAJOR, MINOR
 
 --== Module state ===========================================================
 -- Stored on `lib` so a minor upgrade can reuse the live registry instead of
